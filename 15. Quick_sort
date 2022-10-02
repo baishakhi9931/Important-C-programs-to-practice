@@ -8,6 +8,7 @@ void swap(int* a, int* b)
     *a = *b; 
     *b = t; 
 }
+
 /* Function to print an array */
 void printArray(int arr[], int size) 
 { 
@@ -16,7 +17,35 @@ void printArray(int arr[], int size)
         printf("%d ", arr[i]); 
     printf("\n"); 
 } 
+
+/* Function to perform partition*/
+int partition(int arr[], int p, int r)
+{
+    int i = p - 1;
+    int pivot = arr[r];
+    for(int j = p; j <= r-1; j++)
+    {
+        if(arr[j] <= pivot)
+        {
+            i ++;
+            swap(&arr[i], &arr[j]);
+        }
+    }
+    swap(&arr[i+1], &arr[r]);
+    return i+1;
+}
   
+/* Function to perform quickSort*/
+int quickSort(int arr[], int p, int r)
+{
+    if(p < r)
+    {
+        int q = partition(arr, p, r);
+        quickSort(arr, p, q-1);
+        quickSort(arr, q+1, r);
+    }
+}
+
 // Driver program to test above functions 
 int main() 
 { 
