@@ -1,4 +1,4 @@
-include<stdio.h>
+#include<stdio.h>
 #include<conio.h>
 
 void main()
@@ -9,3 +9,4 @@ void main()
     y = temp;
     printf("x = %d and y = %d", x, y);
     getch();
+}
