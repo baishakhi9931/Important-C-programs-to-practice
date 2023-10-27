@@ -1,0 +1,40 @@
+char * countAndSay(int n){
+	// base case
+    if (n == 1) return "1";
+	
+	// all other cases
+	char *response = countAndSay(n-1); // get previous case
+	char *newresponse = malloc(strlen(response) * (n > 20 ? 2 : 3)); // slight memory optimization
+		
+	// initialize variables 
+	int ctr, curpos=0; // counter, current position in array
+	char curval, *iter=response; // current character, array traversal
+	char *head = response; // pointer to head to free memory later
+
+	// main loop
+	while (*response){
+		// reset counter to zero and curval to current character
+		ctr = 0;
+		curval = *response;
+		while (*iter && *iter == curval){
+			// traverse array, incrementing ctr as long as iter==curval
+			ctr++;
+			iter++;
+		}
+		// save count and number into array
+		newresponse[curpos] = ctr + '0';
+		newresponse[curpos+1] = curval;
+		curpos += 2;
+		response = iter;
+	}
+	// Add a null terminator to the array
+	newresponse[curpos] = '\0';
+	curpos++;
+	// reallocate the array so we don't have wasted space
+	newresponse = realloc(newresponse, curpos);
+	
+	// free memory from last call so we don't leak it 
+	// (note checking for n>2 since case where (n-1)==1 doesn't malloc an array)
+	if (n > 2) free(head);
+	return newresponse;
+}
