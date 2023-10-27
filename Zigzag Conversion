@@ -1,0 +1,68 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+// Function to convert a string in a zigzag pattern
+char* convert(const char* s, int totalFilas) {
+    if (totalFilas == 1) {
+        // If there's only one row, the string remains the same
+        return strdup(s);
+    }
+
+    // Paso #1: Allocate memory for rows and initialize them with empty strings
+    char** posiciones = (char**)malloc(sizeof(char*) * totalFilas);
+    for (int i = 0; i < totalFilas; i++) {
+        posiciones[i] = (char*)malloc(1);
+        posiciones[i][0] = '\0';
+    }
+
+    // Paso #2: Initialize variables for size, direction, and current row
+    int size = strlen(s);
+    int direccion = 1;
+    int filaActual = 0;
+
+    // Paso #3: Iterate through the input string
+    for (int i = 0; i < size; i++) {
+        // Paso #4: Append the character to the current row
+        int len = strlen(posiciones[filaActual]);
+        posiciones[filaActual] = (char*)realloc(posiciones[filaActual], len + 2);
+        posiciones[filaActual][len] = s[i];
+        posiciones[filaActual][len + 1] = '\0';
+
+        // Paso #5: Update the direction if necessary
+        if (filaActual == 0) {
+            direccion = 1;
+        } else if (filaActual == totalFilas - 1) {
+            direccion = -1;
+        }
+
+        // Paso #6: Move to the next row based on the direction
+        filaActual += direccion;
+    }
+
+    // Paso #7: Combine rows into the result string
+    int resultLength = 0;
+    for (int i = 0; i < totalFilas; i++) {
+        resultLength += strlen(posiciones[i]);
+    }
+
+    char* resultado = (char*)malloc(resultLength + 1);
+    resultado[0] = '\0';
+
+    for (int i = 0; i < totalFilas; i++) {
+        strcat(resultado, posiciones[i]);
+        free(posiciones[i]);
+    }
+    free(posiciones);
+
+    return resultado;
+}
+
+int main() {
+    const char* s = "PAYPALISHIRING";
+    int totalFilas = 3;
+    char* resultado = convert(s, totalFilas);
+    printf("%s\n", resultado);
+    free(resultado);
+    return 0;
+}
