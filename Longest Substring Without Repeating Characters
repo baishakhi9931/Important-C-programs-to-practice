@@ -1,0 +1,50 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <stdbool.h>
+
+int lengthOfLongestSubstring(char* s) {
+    int maxLength = 0; // variable to store the maximum length of the substring
+    int i, j;
+    
+    for (i = 0; s[i] != '\0'; i++) { // iterate through each character in the input string
+        bool found = false; // flag to check if a character is already present in the substring
+        int arrSize = 1; // current size of the substring array
+        char* arr = (char*)malloc(arrSize * sizeof(char)); // dynamically allocate memory for the substring array
+        arr[0] = s[i]; // store the first character of the substring
+        
+        for (j = i + 1; s[j] != '\0'; j++) { // iterate through the characters starting from the next index
+            found = false;
+            
+            for (int k = 0; k < arrSize; k++) { // check if the current character is already present in the substring
+                if (arr[k] == s[j]) {
+                    found = true; // character found in the substring
+                    break;
+                }
+            }
+            
+            if (!found) { // if the character is not found, add it to the substring array
+                arrSize++;
+                arr = (char*)realloc(arr, arrSize * sizeof(char)); // resize the substring array
+                arr[arrSize - 1] = s[j]; // add the new character to the array
+            } else {
+                break; // exit the inner loop if the character is found
+            }
+        }
+        
+        if (arrSize > maxLength) { // update the maximum length if the current substring is longer
+            maxLength = arrSize;
+        }
+        
+        free(arr); // free the dynamically allocated memory for the substring array
+    }
+    
+    return maxLength; // return the maximum length of the longest substring
+}
+
+int main() {
+    char* input = "abcabcbb"; // sample input string
+    int result = lengthOfLongestSubstring(input); // call the function to get the result
+    printf("Length of longest substring: %d\n", result); // print the result
+    
+    return 0;
+}
